@@ -1,0 +1,28 @@
+name: mjs_base
+# arch: PLATFORM
+version: 1.0
+skeleton_version: 2017-05-18
+sources:
+  - src
+filesystem:
+  - fs
+config_schema:
+  - ["i2c.enable", true]
+  - ["mqtt.server", "iot.eclipse.org:1883"]
+
+libs:
+    # common mgos libs
+  - origin: https://github.com/mongoose-os-libs/rpc-loopback
+  - origin: https://github.com/mongoose-os-libs/rpc-mqtt
+  - origin: https://github.com/mongoose-os-libs/rpc-service-config
+  - origin: https://github.com/mongoose-os-libs/rpc-service-fs
+  - origin: https://github.com/mongoose-os-libs/rpc-service-gpio
+  - origin: https://github.com/mongoose-os-libs/rpc-service-i2c
+  - origin: https://github.com/mongoose-os-libs/rpc-uart
+  - origin: https://github.com/mongoose-os-libs/updater-rpc
+
+    # libs necessary for the current app
+  - origin: https://github.com/mongoose-os-libs/aws
+  - origin: https://github.com/mongoose-os-libs/mjs
+build_vars:
+  MGOS_ENABLE_ONEWIRE: 1
