@@ -1,11 +1,19 @@
-name: mjs_base
+author: mongoose-os
+description: A default Mongoose OS firmware
 # arch: PLATFORM
 version: 1.0
 skeleton_version: 2017-05-18
+
+tags:
+  - js
+  - c
+
 sources:
   - src
+
 filesystem:
   - fs
+
 config_schema:
   - ["i2c.enable", true]
   - ["mqtt.server", "iot.eclipse.org:1883"]
@@ -26,5 +34,3 @@ libs:
     # libs necessary for the current app
   - origin: https://github.com/mongoose-os-libs/aws
   - origin: https://github.com/mongoose-os-libs/mjs
-build_vars:
-  MGOS_ENABLE_ONEWIRE: 1
