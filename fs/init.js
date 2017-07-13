@@ -5,7 +5,12 @@ load('api_sys.js');
 load('api_timer.js');
 
 // Helper C function get_led_gpio_pin() in src/main.c returns built-in LED GPIO
-let led = ffi('int get_led_gpio_pin()')();
+// ffi() returns a callbale object for the specified C function.
+// As parsing the signature has non-trivial overhead, it's a good practice to
+// store the value for later reuse.
+let get_led_gpio_pin = ffi('int get_led_gpio_pin()');
+// Now call the function to obtain the LED pin number.
+let led = get_led_gpio_pin();
 
 let getInfo = function() {
   return JSON.stringify({total_ram: Sys.total_ram(), free_ram: Sys.free_ram()});
