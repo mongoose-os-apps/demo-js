@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #include "fw/src/mgos.h"
-#include "mjs.h"
 
 #if CS_PLATFORM == CS_P_ESP8266
 #define LED_GPIO 2 /* On ESP-12E there is a blue LED connected to GPIO2  */
