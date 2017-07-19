@@ -12,6 +12,11 @@ let get_led_gpio_pin = ffi('int get_led_gpio_pin()');
 // Now call the function to obtain the LED pin number.
 let led = get_led_gpio_pin();
 
+// When C function is invoked only once, it's possible to use this shorthand.
+let button = ffi('int get_button_gpio_pin()')();
+
+print("LED GPIO: " + JSON.stringify(led) + "; button GPIO: " + JSON.stringify(button));
+
 let getInfo = function() {
   return JSON.stringify({total_ram: Sys.total_ram(), free_ram: Sys.free_ram()});
 };
@@ -24,7 +29,7 @@ Timer.set(1000 /* 1 sec */, true /* repeat */, function() {
 }, null);
 
 // Publish to MQTT topic on a button press. Button is wired to GPIO pin 0
-GPIO.set_button_handler(34, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+GPIO.set_button_handler(button, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
   let topic = '/devices/' + Cfg.get('device.id') + '/events';
   let message = getInfo();
   let ok = MQTT.pub(topic, message, 1);
