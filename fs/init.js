@@ -1,6 +1,7 @@
 load('api_config.js');
 load('api_gpio.js');
 load('api_mqtt.js');
+load('api_net.js');
 load('api_sys.js');
 load('api_timer.js');
 
@@ -34,4 +35,19 @@ GPIO.set_button_handler(button, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function()
   let message = getInfo();
   let ok = MQTT.pub(topic, message, 1);
   print('Published:', ok ? 'yes' : 'no', 'topic:', topic, 'message:', message);
+}, null);
+
+// Monitor network connectivity.
+Net.setStatusEventHandler(function(ev, arg) {
+  let evs = "???";
+  if (ev === Net.STATUS_DISCONNECTED) {
+    evs = "DISCONNECTED";
+  } else if (ev === Net.STATUS_CONNECTING) {
+    evs = "CONNECTING";
+  } else if (ev === Net.STATUS_CONNECTED) {
+    evs = "CONNECTED";
+  } else if (ev === Net.STATUS_GOT_IP) {
+    evs = "GOT_IP";
+  }
+  print("== Net event:", ev, evs);
 }, null);
