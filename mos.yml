@@ -4,6 +4,8 @@ description: A default Mongoose OS firmware
 version: 1.0
 skeleton_version: 2017-05-18
 
+platforms: [ cc3200, esp32, esp8266 ]
+
 libs_version: ${mos_version}
 modules_version: ${mos_version}
 mongoose_os_version: ${mos_version}
