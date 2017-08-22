@@ -3,45 +3,41 @@ description: A default Mongoose OS firmware
 # arch: PLATFORM
 version: 1.0
 manifest_version: 2017-05-18
-
 platforms: [ cc3200, esp32, esp8266 ]
-
 libs_version: ${mos.version}
 modules_version: ${mos.version}
 mongoose_os_version: ${mos.version}
 
+config_schema:
+  - ["mqtt.server", "iot.eclipse.org:1883"]
+  - ["i2c.enable", true]
+  - ["pins", "o", {title: "Pins layout"}]
+  - ["pins.led", "i", -1, {title: "LED GPIO pin"}]
+  - ["pins.button", "i", -1, {title: "Button GPIO pin"}]
+
+conds:
+  - when: mos.platform == "esp32"
+    apply:
+      config_schema:
+        - ["pins.led", 21]
+        - ["pins.button", 0]
+  - when: mos.platform == "esp8266"
+    apply:
+      config_schema:
+        - ["pins.led", 2]
+        - ["pins.button", 0]
+  - when: mos.platform == "cc3200"
+    apply:
+      config_schema:
+        - ["pins.led", 64]
+        - ["pins.button", 15]
+
 tags:
   - js
-  - c
-
-sources:
-  - src
 
 filesystem:
   - fs
 
-config_schema:
-  - ["i2c.enable", true]
-  - ["mqtt.server", "iot.eclipse.org:1883"]
-
 libs:
     # common mgos libs
-  - origin: https://github.com/mongoose-os-libs/ca-bundle
-  - origin: https://github.com/mongoose-os-libs/http-server
-  - origin: https://github.com/mongoose-os-libs/ota-http-server
-  - origin: https://github.com/mongoose-os-libs/pwm
-  - origin: https://github.com/mongoose-os-libs/rpc-loopback
-  - origin: https://github.com/mongoose-os-libs/rpc-mqtt
-  - origin: https://github.com/mongoose-os-libs/rpc-service-config
-  - origin: https://github.com/mongoose-os-libs/rpc-service-fs
-  - origin: https://github.com/mongoose-os-libs/rpc-service-gpio
-  - origin: https://github.com/mongoose-os-libs/rpc-service-i2c
-  - origin: https://github.com/mongoose-os-libs/rpc-service-ota
-  - origin: https://github.com/mongoose-os-libs/rpc-service-wifi
-  - origin: https://github.com/mongoose-os-libs/rpc-uart
-  - origin: https://github.com/mongoose-os-libs/spi
-  - origin: https://github.com/mongoose-os-libs/vfs-dev-spi-flash
-  - origin: https://github.com/mongoose-os-libs/wifi
-
-    # libs necessary for the current app
-  - origin: https://github.com/mongoose-os-libs/aws
+  - origin: https://github.com/mongoose-os-libs/js-demo-bundle
