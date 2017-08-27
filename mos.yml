@@ -39,5 +39,4 @@ filesystem:
   - fs
 
 libs:
-    # common mgos libs
   - origin: https://github.com/mongoose-os-libs/js-demo-bundle
