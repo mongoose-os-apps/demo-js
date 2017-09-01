@@ -3,7 +3,6 @@ description: A default Mongoose OS firmware
 # arch: PLATFORM
 version: 1.0
 manifest_version: 2017-05-18
-platforms: [ cc3200, esp32, esp8266 ]
 libs_version: ${mos.version}
 modules_version: ${mos.version}
 mongoose_os_version: ${mos.version}
@@ -27,6 +26,11 @@ conds:
         - ["pins.led", 2]
         - ["pins.button", 0]
   - when: mos.platform == "cc3200"
+    apply:
+      config_schema:
+        - ["pins.led", 64]
+        - ["pins.button", 15]
+  - when: mos.platform == "cc3220"
     apply:
       config_schema:
         - ["pins.led", 64]
