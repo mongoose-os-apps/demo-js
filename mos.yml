@@ -1,5 +1,5 @@
 author: mongoose-os
-description: A default Mongoose OS firmware
+description: A JS-enabled demo Mongoose OS firmware
 # arch: PLATFORM
 version: 1.0
 manifest_version: 2017-05-18
