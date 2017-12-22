@@ -1,4 +1,5 @@
 load('api_config.js');
+load('api_events.js');
 load('api_gpio.js');
 load('api_mqtt.js');
 load('api_net.js');
@@ -33,7 +34,7 @@ GPIO.set_button_handler(button, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function()
 }, null);
 
 // Monitor network connectivity.
-Net.setStatusEventHandler(function(ev, arg) {
+Event.addGroupHandler(Net.EVENT_GRP, function(ev, evdata, arg) {
   let evs = '???';
   if (ev === Net.STATUS_DISCONNECTED) {
     evs = 'DISCONNECTED';
