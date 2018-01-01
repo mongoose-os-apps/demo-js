@@ -10,31 +10,6 @@ mongoose_os_version: ${mos.version}
 config_schema:
   - ["mqtt.server", "iot.eclipse.org:1883"]
   - ["i2c.enable", true]
-  - ["pins", "o", {title: "Pins layout"}]
-  - ["pins.led", "i", -1, {title: "LED GPIO pin"}]
-  - ["pins.button", "i", -1, {title: "Button GPIO pin"}]
-
-conds:
-  - when: mos.platform == "esp32"
-    apply:
-      config_schema:
-        - ["pins.led", 21]
-        - ["pins.button", 0]
-  - when: mos.platform == "esp8266"
-    apply:
-      config_schema:
-        - ["pins.led", 2]
-        - ["pins.button", 0]
-  - when: mos.platform == "cc3200"
-    apply:
-      config_schema:
-        - ["pins.led", 64]
-        - ["pins.button", 15]
-  - when: mos.platform == "cc3220"
-    apply:
-      config_schema:
-        - ["pins.led", 64]
-        - ["pins.button", 15]
 
 tags:
   - js
