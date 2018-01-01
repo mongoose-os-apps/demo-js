@@ -21,7 +21,7 @@ let getInfo = function() {
 
 // Blink built-in LED every second
 GPIO.set_mode(led, GPIO.MODE_OUTPUT);
-Timer.set(1000 /* 1 sec */, true /* repeat */, function() {
+Timer.set(1000 /* 1 sec */, Timer.REPEAT, function() {
   let value = GPIO.toggle(led);
   print(value ? 'Tick' : 'Tock', 'uptime:', Sys.uptime(), getInfo());
 }, null);
