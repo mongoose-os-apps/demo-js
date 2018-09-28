@@ -6,7 +6,7 @@ load('api_sys.js');
 
 let led = Cfg.get('board.led1.pin');           // Built-in LED GPIO number
 let onhi = Cfg.get('board.led1.active_high');  // LED on when high?
-let state = {on: false};                       // Device state - LED on/off status
+let state = {on: false};  // Device state - LED on/off status
 
 // Set up Shadow handler to synchronise device state with the shadow state
 Shadow.addHandler(function(event, obj) {
@@ -29,7 +29,7 @@ Shadow.addHandler(function(event, obj) {
     for (let key in obj) {  // Iterate over all keys in delta
       if (key === 'on') {   // We know about the 'on' key. Handle it!
         state.on = obj.on;  // Synchronise the state
-        var level = onhi ? state.on : !state.on;
+        let level = onhi ? state.on : !state.on;
         GPIO.set_mode(led, GPIO.MODE_OUTPUT);  // And turn on/off the LED
         GPIO.write(led, level);                // according to the delta
         print('LED on ->', state.on);
