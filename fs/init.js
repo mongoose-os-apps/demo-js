@@ -4,9 +4,9 @@ load('api_shadow.js');
 load('api_timer.js');
 load('api_sys.js');
 
-let led = Cfg.get('pins.led');               // Built-in LED GPIO number
-let onhi = Cfg.get('pins.led_active_high');  // LED on when high?
-let state = {on: false};                     // Device state - LED on/off status
+let led = Cfg.get('board.led1.pin');           // Built-in LED GPIO number
+let onhi = Cfg.get('board.led1.active_high');  // LED on when high?
+let state = {on: false};                       // Device state - LED on/off status
 
 // Set up Shadow handler to synchronise device state with the shadow state
 Shadow.addHandler(function(event, obj) {
