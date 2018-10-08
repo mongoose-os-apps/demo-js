@@ -8,6 +8,15 @@ let led = Cfg.get('board.led1.pin');           // Built-in LED GPIO number
 let onhi = Cfg.get('board.led1.active_high');  // LED on when high?
 let state = {on: false};  // Device state - LED on/off status
 
+function setOutput(on) {
+  let level = onhi ? on : !on;
+  GPIO.write(led, level);                // according to the delta
+  print('LED on ->', on);
+}
+
+GPIO.set_mode(led, GPIO.MODE_OUTPUT);  // And turn on/off the LED
+setOutput(state.on);
+
 // Set up Shadow handler to synchronise device state with the shadow state
 Shadow.addHandler(function(event, obj) {
   if (event === 'CONNECTED') {
@@ -19,7 +28,7 @@ Shadow.addHandler(function(event, obj) {
 
     print('  Setting up timer to periodically report metrics..');
     Timer.set(1000, Timer.REPEAT, function() {
-      let update = {uptime: Sys.uptime()};
+      let update = {on: state.on, uptime: Sys.uptime()};
       print(JSON.stringify(update));
       Shadow.update(0, update);  // Set uptime in seconds in the shadow
     }, null);
@@ -29,10 +38,7 @@ Shadow.addHandler(function(event, obj) {
     for (let key in obj) {  // Iterate over all keys in delta
       if (key === 'on') {   // We know about the 'on' key. Handle it!
         state.on = obj.on;  // Synchronise the state
-        let level = onhi ? state.on : !state.on;
-        GPIO.set_mode(led, GPIO.MODE_OUTPUT);  // And turn on/off the LED
-        GPIO.write(led, level);                // according to the delta
-        print('LED on ->', state.on);
+        setOutput(state.on);
       } else {
         print('Dont know how to handle key', key);
       }
