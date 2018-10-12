@@ -6,16 +6,17 @@ load('api_sys.js');
 
 let led = Cfg.get('board.led1.pin');           // Built-in LED GPIO number
 let onhi = Cfg.get('board.led1.active_high');  // LED on when high?
-let state = {on: false};  // Device state - LED on/off status
+let state = {on: false, uptime: 0};            // Device state
+let timer = null;                              // Initialize when connected
 
-function setOutput(on) {
+let setLED = function(on) {
   let level = onhi ? on : !on;
-  GPIO.write(led, level);                // according to the delta
+  GPIO.write(led, level);
   print('LED on ->', on);
-}
+};
 
 GPIO.set_mode(led, GPIO.MODE_OUTPUT);  // And turn on/off the LED
-setOutput(state.on);
+setLED(state.on);
 
 // Set up Shadow handler to synchronise device state with the shadow state
 Shadow.addHandler(function(event, obj) {
@@ -27,18 +28,20 @@ Shadow.addHandler(function(event, obj) {
                               // cloud will send UPDATE_DELTA to us
 
     print('  Setting up timer to periodically report metrics..');
-    Timer.set(1000, Timer.REPEAT, function() {
-      let update = {on: state.on, uptime: Sys.uptime()};
-      print(JSON.stringify(update));
-      Shadow.update(0, update);  // Set uptime in seconds in the shadow
-    }, null);
+    if (!timer) {
+      timer = Timer.set(1000, Timer.REPEAT, function() {
+        let update = {on: state.on, uptime: Sys.uptime()};
+        print(JSON.stringify(update));
+        Shadow.update(0, update);  // Set uptime in seconds in the shadow
+      }, null);
+    }
 
   } else if (event === 'UPDATE_DELTA') {
     print('GOT DELTA:', JSON.stringify(obj));
     for (let key in obj) {  // Iterate over all keys in delta
       if (key === 'on') {   // We know about the 'on' key. Handle it!
         state.on = obj.on;  // Synchronise the state
-        setOutput(state.on);
+        setLED(state.on);   // according to the delta
       } else {
         print('Dont know how to handle key', key);
       }
