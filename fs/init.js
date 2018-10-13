@@ -15,8 +15,14 @@ let setLED = function(on) {
   print('LED on ->', on);
 };
 
-GPIO.set_mode(led, GPIO.MODE_OUTPUT);  // And turn on/off the LED
+GPIO.set_mode(led, GPIO.MODE_OUTPUT);
 setLED(state.on);
+
+let reportState = function() {
+  state.uptime = Sys.uptime();
+  print(JSON.stringify(state));
+  Shadow.update(0, state);
+};
 
 // Set up Shadow handler to synchronise device state with the shadow state
 Shadow.addHandler(function(event, obj) {
@@ -27,14 +33,8 @@ Shadow.addHandler(function(event, obj) {
                               // delta on the cloud, in which case the
                               // cloud will send UPDATE_DELTA to us
 
-    print('  Setting up timer to periodically report metrics..');
-    if (!timer) {
-      timer = Timer.set(1000, Timer.REPEAT, function() {
-        let update = {on: state.on, uptime: Sys.uptime()};
-        print(JSON.stringify(update));
-        Shadow.update(0, update);  // Set uptime in seconds in the shadow
-      }, null);
-    }
+    print('  Setting up timer to periodically report device state..');
+    if (!timer) timer = Timer.set(1000, Timer.REPEAT, reportState, null);
 
   } else if (event === 'UPDATE_DELTA') {
     print('GOT DELTA:', JSON.stringify(obj));
