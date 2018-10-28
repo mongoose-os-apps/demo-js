@@ -20,13 +20,13 @@ GPIO.set_mode(led, GPIO.MODE_OUTPUT);
 setLED(state.on);
 
 let reportState = function() {
-  print(JSON.stringify(state));
   Shadow.update(0, state);
 };
 
 // Update state every second, and report to cloud if online
 Timer.set(1000, Timer.REPEAT, function() {
   state.uptime = Sys.uptime();
+  print('online:', online, JSON.stringify(state));
   if (online) reportState();
 }, null);
 
@@ -38,6 +38,11 @@ Shadow.addHandler(function(event, obj) {
       if (key === 'on') {   // We know about the 'on' key. Handle it!
         state.on = obj.on;  // Synchronise the state
         setLED(state.on);   // according to the delta
+      } else if (key === 'reboot') {
+        state.reboot = obj.reboot;      // Reboot button clicked: that
+        Timer.set(750, 0, function() {  // incremented 'reboot' counter
+          Sys.reboot();                 // Sync and schedule a reboot
+        }, null);
       }
     }
     reportState();  // Report our new state, hopefully clearing delta
