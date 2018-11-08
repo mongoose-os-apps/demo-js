@@ -1,0 +1,20 @@
+os: [ linux ]
+dist: xenial
+sudo: enabled
+language: c
+
+# Install mos tool
+addons:
+  apt:
+    sources:
+      - sourceline: "ppa:mongoose-os/mos"
+    packages:
+      - mos-latest
+
+script:
+  - mos version
+  - mos build --local --clean --platform esp8266
+  - mos build --local --clean --platform esp32
+  - mos build --local --clean --platform cc3220
+  - mos build --local --clean --platform stm32 --board B-L475E-IOT01A
+  - mos build --local --clean --platform stm32 --board DISCO-F746NG
