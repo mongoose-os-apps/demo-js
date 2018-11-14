@@ -33,6 +33,7 @@ let reportState = function() {
 // Update state every second, and report to cloud if online
 Timer.set(1000, Timer.REPEAT, function() {
   state.uptime = Sys.uptime();
+  state.ram_free = Sys.free_ram();
   print('online:', online, JSON.stringify(state));
   if (online) reportState();
 }, null);
@@ -72,7 +73,7 @@ if (btn >= 0) {
     let sendMQTT = true;
     if (Azure.isConnected()) {
       print('== Sending Azure D2C message:', message);
-      Azure.sendD2CMsg("", message);
+      Azure.sendD2CMsg('', message);
       sendMQTT = false;
     }
     if (GCP.isConnected()) {
@@ -82,7 +83,7 @@ if (btn >= 0) {
     }
     if (Watson.isConnected()) {
       print('== Sending Watson event:', message);
-      Watson.sendEventJSON("ev", {d: state});
+      Watson.sendEventJSON('ev', {d: state});
       sendMQTT = false;
     }
     if (Dash.isConnected()) {
@@ -103,6 +104,7 @@ if (btn >= 0) {
 
 Event.on(Event.CLOUD_CONNECTED, function() {
   online = true;
+  Shadow.update(0, {ram_total: Sys.total_ram()});
 }, null);
 
 Event.on(Event.CLOUD_DISCONNECTED, function() {
