@@ -49,7 +49,7 @@ Shadow.addHandler(function(event, obj) {
       } else if (key === 'reboot') {
         state.reboot = obj.reboot;      // Reboot button clicked: that
         Timer.set(750, 0, function() {  // incremented 'reboot' counter
-          Sys.reboot();                 // Sync and schedule a reboot
+          Sys.reboot(500);                 // Sync and schedule a reboot
         }, null);
       }
     }
