@@ -22,11 +22,8 @@ libs:
   - origin: https://github.com/mongoose-os-libs/js-demo-bundle
 
 conds:
-  # It's not that we can't work with multicore
-  # but we cannot afford it because of space (32K).
   - when: mos.platform == "esp32"
     apply:
       build_vars:
-        ESP_IDF_SDKCONFIG_OPTS: >
-          ${build_vars.ESP_IDF_SDKCONFIG_OPTS}
-          CONFIG_FREERTOS_UNICORE=y
+        # Icrease app szie for ESP32
+        APP_SLOT_SIZE: 0x190000
