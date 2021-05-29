@@ -18,8 +18,8 @@ filesystem:
   - fs
 
 libs:
-  - origin: https://github.com/mongoose-os-libs/boards
-  - origin: https://github.com/mongoose-os-libs/js-demo-bundle
+  - location: https://github.com/mongoose-os-libs/boards
+  - location: https://github.com/mongoose-os-libs/js-demo-bundle
 
 conds:
   - when: mos.platform == "esp32"
