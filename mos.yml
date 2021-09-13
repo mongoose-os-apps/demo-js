@@ -8,7 +8,7 @@ modules_version: ${mos.version}
 mongoose_os_version: ${mos.version}
 
 config_schema:
-  - ["mqtt.server", "iot.eclipse.org:1883"]
+  - ["mqtt.server", "mqtt.eclipseprojects.io:1883"]
   - ["i2c.enable", true]
 
 tags:
