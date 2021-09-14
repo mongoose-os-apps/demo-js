@@ -10,6 +10,7 @@ mongoose_os_version: ${mos.version}
 config_schema:
   - ["mqtt.server", "mqtt.eclipseprojects.io:1883"]
   - ["i2c.enable", true]
+#  - ["board.led1.pin", "i", 4, {title: "LED on/off default ESP32 PIN"}]
 
 tags:
   - js
